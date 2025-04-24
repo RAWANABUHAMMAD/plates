@@ -8,18 +8,6 @@ use App\Http\Controllers\IngredientController;
 
 
 
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::get("/", function () {
     return view('public.layout.homepage');
 });
@@ -61,8 +49,10 @@ Route::get('signup', function () {
     return view('public.layout.signup');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard.layout.dashboard');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard.layout.dashboard');
+    });
 });
 
 Route::resource('contacts', ContactController::class);
@@ -83,3 +73,7 @@ Route::get('/recipe/category/{category}', [App\Http\Controllers\RecipeController
 
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
